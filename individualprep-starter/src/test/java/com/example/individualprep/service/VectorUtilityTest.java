@@ -79,4 +79,85 @@ public class VectorUtilityTest {
             vectorUtility.dotProduct(null, new double[]{1.0});
         });
     }
+
+    // <----- Person ? (add vector) ----->
+
+    @Test
+    void add_addsVector() {
+        double[] v1 = new double[] {1.0, 2.0, 3.0};
+        double[] v2 = new double[] {4.0, 5.0, 6.0};
+
+        double[] expected = new double[] {5.0, 7.0, 9.0};
+
+        double[] actual = vectorUtility.add(v1, v2);
+
+        assertArrayEquals(expected, actual, 1e-12);
+    }
+
+    @Test
+    void add_withNegativeNumber() {
+        double[] v1 = new double[] {1.0, -2.0, 3.0};
+        double[] v2 = new double[] {-4.0, 5.0, -6.0};
+
+        double[] expected = new double[] {-3.0, 3.0, -3.0};
+
+        double[] actual = vectorUtility.add(v1, v2);
+
+        assertArrayEquals(expected, actual, 1e-12);
+    }
+
+    @Test
+    void add_withZeroVector() {
+        double[] v1 = new double[] {1.0, 2.0, 3.0};
+        double[] v2 = new double[] {0.0, 0.0, 0.0};
+
+        double[] expected = new double[] {1.0, 2.0, 3.0};
+
+        double[] actual = vectorUtility.add(v1, v2);
+
+        assertArrayEquals(expected, actual, 1e-12);
+    }
+
+    @Test
+    void add_emptyVector() {
+        double[] v1 = new double[] {};
+        double[] v2 = new double[] {};
+
+        double[] expected = new double[] {};
+
+        double[] actual = vectorUtility.add(v1, v2);
+
+        assertArrayEquals(expected, actual, 1e-12);
+    }
+
+    @Test
+    void add_v1Null() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            vectorUtility.add(null, new double[] {1.0});
+        });
+
+        assertEquals("v1 cannot be null", ex.getMessage());
+    }
+
+    @Test
+    void add_v2Null() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            vectorUtility.add(new double[] {1.0}, null);
+        });
+
+        assertEquals("v2 cannot be null", ex.getMessage());
+    }
+
+    @Test
+    void add_differentLength() {
+        double[] v1 = new double[] {1.0, 2.0};
+        double[] v2 = new double[] {1.0, 2.0, 3.0};
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            vectorUtility.add(v1, v2);
+        });
+
+        assertEquals("v1 and v2 have to be the same length", ex.getMessage());
+    }
+
 }
