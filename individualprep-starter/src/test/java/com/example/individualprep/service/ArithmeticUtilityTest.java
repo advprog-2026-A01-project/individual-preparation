@@ -91,4 +91,29 @@ public class ArithmeticUtilityTest {
         });
         assertEquals("cannot raise 0 to a negative number", ex.getMessage());
     }
+
+    // Person B (divide)
+    @Test
+    void divide_twoPositiveNumbers() {
+        assertEquals(5.0, arithmeticUtility.divide(10.0, 2.0), 1e-12);
+    }
+
+    @Test
+    void divide_withNegativeNumber() {
+        assertEquals(-5.0, arithmeticUtility.divide(-10.0, 2.0), 1e-12);
+    }
+
+    @Test
+    void divide_resultDecimal() {
+        assertEquals(2.5, arithmeticUtility.divide(5.0, 2.0), 1e-12);
+    }
+
+    @Test
+    void divide_byZero_throwsException() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            arithmeticUtility.divide(5.0, 0.0);
+        });
+
+        assertEquals("cannot divide by zero", ex.getMessage());
+    }
 }
