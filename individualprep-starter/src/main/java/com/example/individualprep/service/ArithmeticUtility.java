@@ -24,7 +24,33 @@ public class ArithmeticUtility {
     }
 
     public double exponent(double o1, int n) {
-        // TODO: Implement me properly!
-        return 0.0;
+        if (n == 0) {
+            return 1.0;
+        }
+
+        if (o1 == 0.0 && n < 0) {
+            throw new IllegalArgumentException("cannot raise 0 to a negative number");
+        }
+
+        boolean negativeExp = false;
+        if (n < 0) {
+            negativeExp = true;
+        }
+
+        int exp = n;
+        if (negativeExp) {
+            exp = -exp;
+        }
+
+        double result = 1.0;
+        for (int i = 0; i < exp; i++) {
+            result = result * o1;
+        }
+
+        if (negativeExp) {
+            result = 1.0 / result;
+        }
+
+        return result;
     }
 }
