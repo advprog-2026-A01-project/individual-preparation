@@ -20,9 +20,22 @@ public class VectorController {
 
     @PostMapping("/add")
     public ResponseEntity<VectorResponse> add(@RequestBody VectorRequest request) {
+        if (request == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (request.vector1() == null || request.vector2() == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (request.vector1().length != request.vector2().length) {
+            return ResponseEntity.badRequest().build();
+        }
+
         double[] result = vectorUtility.add(request.vector1(), request.vector2());
         return ResponseEntity.ok(new VectorResponse(result));
     }
+
 
     @PostMapping("/subtract")
     public ResponseEntity<VectorResponse> subtract(@RequestBody VectorRequest request) {
