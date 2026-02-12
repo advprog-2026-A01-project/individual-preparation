@@ -2,6 +2,8 @@ package com.example.individualprep.service;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class VectorUtilityTest {
 
@@ -42,5 +44,39 @@ public class VectorUtilityTest {
                 vectorUtility.multiply(new double[] { }, 5),
                 1e-12
         );
+    }
+
+    // Person D
+    @Test
+    void testDotProductValid() {
+        double[] v1 = {1.0, 2.0, 3.0};
+        double[] v2 = {4.0, 5.0, 6.0};
+        assertEquals(32.0, vectorUtility.dotProduct(v1, v2), 0.0001);
+    }
+
+    @Test
+    void testDotProductZeroVector() {
+        double[] v1 = {1.0, 2.0};
+        double[] v2 = {0.0, 0.0};
+        assertEquals(0.0, vectorUtility.dotProduct(v1, v2), 0.0001);
+    }
+
+    @Test
+    void testDotProductDifferentLengthThrowsException() {
+        double[] v1 = {1.0, 2.0};
+        double[] v2 = {1.0, 2.0, 3.0};
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            vectorUtility.dotProduct(v1, v2);
+        });
+        
+        assertEquals("Both vectors must have the same length!", exception.getMessage());
+    }
+
+    @Test
+    void testDotProductNullVectorThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            vectorUtility.dotProduct(null, new double[]{1.0});
+        });
     }
 }
