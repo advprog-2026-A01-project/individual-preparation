@@ -116,4 +116,32 @@ public class ArithmeticUtilityTest {
 
         assertEquals("cannot divide by zero", ex.getMessage());
     }
+
+    // Person E (Add)
+    // Person E (Add)
+    @Test
+    void add_twoPositiveNumbers() {
+        assertEquals(15.0, arithmeticUtility.add(10.0, 5.0), 1e-12);
+    }
+
+    @Test
+    void add_oneNegativeNumber() {
+        assertEquals(5.0, arithmeticUtility.add(10.0, -5.0), 1e-12);
+        assertEquals(-5.0, arithmeticUtility.add(-10.0, 5.0), 1e-12);
+    }
+
+    @Test
+    void add_twoNegativeNumbers() {
+        assertEquals(-15.0, arithmeticUtility.add(-10.0, -5.0), 1e-12);
+    }
+
+    @Test
+    void add_withZero() {
+        assertEquals(10.0, arithmeticUtility.add(10.0, 0.0), 1e-12);
+    }
+
+    @Test
+    void add_twoDecimals() {
+        assertEquals(1.1, arithmeticUtility.add(0.9, 0.2), 1e-12);
+    }
 }
