@@ -1,34 +1,60 @@
 name: SonarCloud Analysis
+
 on:
   push:
-    branches:
-      - main
-      - staging
-      - 'feat/**'
   pull_request:
-    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
 
 jobs:
-  build:
-    name: Build and analyze
+  sonar:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 
-      - name: Set up JDK 21
-        uses: actions/setup-java@v3
+          fetch-depth: 0
+
+      - name: Detect project directory (where gradlew is)
+        shell: bash
+        run: |
+          if [ -f "./gradlew" ]; then
+            echo "PROJECT_DIR=." >> "$GITHUB_ENV"
+          elif [ -f "./individualprep-starter/gradlew" ]; then
+            echo "PROJECT_DIR=individualprep-starter" >> "$GITHUB_ENV"
+          else
+            echo "ERROR: gradlew not found"
+            ls -la
+            exit 1
+          fi
+
+      - uses: actions/setup-java@v4
         with:
-          java-version: 21
-          distribution: 'temurin'
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Build and analyze
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Ensure gradlew is executable
+        run: chmod +x "${PROJECT_DIR}/gradlew"
+
+      - name: Build + Test + Lint + Coverage
+        run: |
+          cd "${PROJECT_DIR}"
+          ./gradlew clean check jacocoTestReport
+
+      - name: SonarCloud
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   
-        run: ./gradlew build sonar --info
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_ORG: ${{ vars.SONAR_ORG }}
+          SONAR_PROJECT_KEY: ${{ vars.SONAR_PROJECT_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd "${PROJECT_DIR}"
+          ./gradlew sonarqube \
+            -Dsonar.token="${SONAR_TOKEN}" \
+            -Dsonar.organization="${SONAR_ORG}" \
+            -Dsonar.projectKey="${SONAR_PROJECT_KEY}" \
+            -Dsonar.qualitygate.wait=true \
+            -Dsonar.ws.timeout=300
