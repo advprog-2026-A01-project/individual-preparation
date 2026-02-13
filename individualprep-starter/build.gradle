@@ -51,19 +51,13 @@ checkstyle {
 	// default: config/checkstyle/checkstyle.xml
 }
 
+
 sonar {
-	properties {
-		property 'sonar.host.url', 'https://sonarcloud.io'
-
-		// Ambil dari -D (CI) atau env; jangan hardcode biar tim gampang nyamain config
-		def org = System.getProperty('sonar.organization', System.getenv('SONAR_ORG'))
-		def key = System.getProperty('sonar.projectKey', System.getenv('SONAR_PROJECT_KEY'))
-		if (org != null) property 'sonar.organization', org
-		if (key != null) property 'sonar.projectKey', key
-
-		property 'sonar.sources', 'src/main/java'
-		property 'sonar.tests', 'src/test/java'
-		property 'sonar.java.binaries', 'build/classes/java/main'
-		property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
-	}
+    properties {
+        property "sonar.projectKey", "advprog-2026-a01-project_individual-preparation"
+        property "sonar.organization", "advprog-2026-a01-project"
+        property "sonar.host.url", "https://sonarcloud.io/"
+        // Tambahkan ini untuk menghindari error timeout di log kamu
+        property "sonar.scanner.socketTimeout", "300" 
+    }
 }

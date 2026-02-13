@@ -74,7 +74,7 @@ jobs:
         shell: bash
         run: |
           cd "${PROJECT_DIR}"
-          ./gradlew sonarqube \
+          ./gradlew sonar \
             -Dsonar.token="${SONAR_TOKEN}" \
             -Dsonar.organization="${SONAR_ORG}" \
             -Dsonar.projectKey="${SONAR_PROJECT_KEY}" \
@@ -94,7 +94,7 @@ jobs:
         shell: bash
         run: |
           cd "${PROJECT_DIR}"
-          ./gradlew sonarqube \
+          ./gradlew sonar \
             -Dsonar.token="${SONAR_TOKEN}" \
             -Dsonar.organization="${SONAR_ORG}" \
             -Dsonar.projectKey="${SONAR_PROJECT_KEY}" \
