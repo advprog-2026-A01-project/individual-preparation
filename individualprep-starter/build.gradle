@@ -2,6 +2,15 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.0.2'
 	id 'io.spring.dependency-management' version '1.1.7'
+
+	// Linter
+	id 'checkstyle'
+
+	// Coverage report (for Sonar)
+	id 'jacoco'
+
+	// SonarCloud
+	id 'org.sonarqube' version '6.0.1.5171'
 }
 
 group = 'com.example'
@@ -26,4 +35,35 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+	finalizedBy tasks.jacocoTestReport
+}
+
+jacocoTestReport {
+	dependsOn test
+	reports {
+		xml.required = true
+		html.required = true
+	}
+}
+
+checkstyle {
+	toolVersion = '10.12.7'
+	// default: config/checkstyle/checkstyle.xml
+}
+
+sonar {
+	properties {
+		property 'sonar.host.url', 'https://sonarcloud.io'
+
+		// Ambil dari -D (CI) atau env; jangan hardcode biar tim gampang nyamain config
+		def org = System.getProperty('sonar.organization', System.getenv('SONAR_ORG'))
+		def key = System.getProperty('sonar.projectKey', System.getenv('SONAR_PROJECT_KEY'))
+		if (org != null) property 'sonar.organization', org
+		if (key != null) property 'sonar.projectKey', key
+
+		property 'sonar.sources', 'src/main/java'
+		property 'sonar.tests', 'src/test/java'
+		property 'sonar.java.binaries', 'build/classes/java/main'
+		property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/test/jacocoTestReport.xml'
+	}
 }
