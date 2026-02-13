@@ -30,6 +30,6 @@ public class VectorControllerDotProductIT {
                                 }
                                 """))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.result").value(32.0));
+                .andExpect(jsonPath("$.scalarResult").value(32.0));
     }
 }
