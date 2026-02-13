@@ -1,8 +1,7 @@
 plugins {
-    id 'java'
-    id 'org.springframework.boot' version '3.2.5'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.sonarqube' version '6.0.1.5171'
+	id 'java'
+	id 'org.springframework.boot' version '4.0.2'
+	id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.example'
@@ -10,30 +9,21 @@ version = '0.0.1-SNAPSHOT'
 description = 'Individual preparation for the Advanced Programming course at the Faculty of Computer Science Universitas Indonesia'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
+	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
-}
-
-sonar {
-    properties {
-        property "sonar.projectKey", "individual-preparation"
-        property "sonar.organization", "advprog-2026-A01-project"
-        property "sonar.host.url", "https://sonarcloud.io"
-        property "sonar.scanner.socketTimeout", "300"
-    }
+	useJUnitPlatform()
 }
