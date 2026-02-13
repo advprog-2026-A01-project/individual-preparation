@@ -1,6 +1,5 @@
 name: Continuous Integration (CI)
 
-## Run CI jobs on all branches by default
 on:
   push:
   pull_request:
@@ -9,6 +8,9 @@ jobs:
   test:
     name: Run tests
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: individualprep-starter
     steps:
       - name: Check out the Git repository
         uses: actions/checkout@v4
@@ -18,7 +20,11 @@ jobs:
           distribution: "temurin"
           java-version: "21"
           cache: "gradle"
-      - name: Add permission to gradlew
+      - name: Fix line endings for gradlew (if needed)
+        run: sed -i 's/\r$//' gradlew
+
+      - name: Grant execute permission for gradlew
         run: chmod +x gradlew
+
       - name: Run unit tests
         run: ./gradlew test
