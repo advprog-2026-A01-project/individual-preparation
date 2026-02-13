@@ -239,4 +239,37 @@ public class VectorUtilityTest {
         assertEquals("v1 and v2 have to be the same length", ex.getMessage());
     }
 
+    // Person E (norm)
+    @Test
+    void norm_standardVector() {
+        double[] v = {3.0, 4.0};
+        assertEquals(5.0, vectorUtility.norm(v), 1e-12);
+    }
+
+    @Test
+    void norm_withNegativeNumbers() {
+        double[] v = {-3.0, -4.0};
+        assertEquals(5.0, vectorUtility.norm(v), 1e-12);
+    }
+
+    @Test
+    void norm_zeroVector() {
+        double[] v = {0.0, 0.0, 0.0};
+        assertEquals(0.0, vectorUtility.norm(v), 1e-12);
+    }
+
+    @Test
+    void norm_emptyVector() {
+        double[] v = {};
+        assertEquals(0.0, vectorUtility.norm(v), 1e-12);
+    }
+
+    @Test
+    void norm_nullVector_throwsException() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () -> {
+            vectorUtility.norm(null);
+        });
+
+        assertEquals("Vector must not be null!", ex.getMessage());
+    }
 }
